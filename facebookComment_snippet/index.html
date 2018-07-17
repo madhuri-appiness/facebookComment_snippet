@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title></title>
+    <script src="plugin/angular.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/master.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="controller/maincontroller.js"></script>
+    <script src="plugin/pagedirective.js"></script>
+</head>
+
+<body ng-app="app">
+    <div class="container" ng-controller="widgetCtrl">
+        <h1>Sample widget</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="comment-snippet" ng-repeat="(key, post) in posts">
+
+                    <div class="inline-block">
+                        <img src="{{post.image}}" alt="" class="user">
+                        <h3 class="inline-block">{{post.name}}</h3>
+                        <h4>{{post.text}}</h4>
+                        <p class="inline-block date">{{post.date}}</p>
+                        <a href="#" ng-click="postLike(key)">Like {{post.like}} </a>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" class="form-control inline-block" placeholder="Join discussion" ng-model="newcomment[key].comment">
+                                    <button class="btn btn-primary" ng-click="postComment(key)">Add Comment</button>
+                                </div>
+                            </form>
+                            <ul>
+                                <li ng-repeat="(keyC, item) in post.comments track by $index">
+                                    <img ng-src="{{item.image}}" alt="" class="user">
+                                    <h5 class="inline-block" ng-if="item.name">
+                                        {{item.name}}
+                                    </h5>
+                                    <h5 class="inline-block" ng-if="!item.name">
+                                        User
+                                    </h5>
+                                    <p>{{item.comment}}</p>
+
+                                    <p class="date inline-block">{{item.date | date:shortDate }}</p>
+
+                                    <a href="#" ng-click="commentLike(key,keyC,item.id)">
+                                        <img src="./assets/like.png" class="like" alt="">{{item.like}}
+                                    </a>
+
+                                    <p class="reply inline-block" ng-click="addReply(post.id,item.id,$index)">Reply </p>
+                                    <div class="form-group" ng-if="item.id ===addReplyToCmt">
+                                        <input type="text" class="form-control inline-block" placeholder="Join discussion" ng-model="replycomment[key].comment" ng-keypress="updateReply(key,keyC,$event)">
+                                    </div>
+                                    <div ng-repeat="(keyR, reply) in item.reply" class="reply-section">
+                                        <img ng-src="{{reply.image}}" alt="" class="user">
+                                        <h5 class="inline-block" ng-if="reply.name">
+                                            {{reply.name}}
+                                        </h5>
+                                        <h5 class="inline-block" ng-if="!reply.name">
+                                            User
+                                        </h5>
+                                        <p>{{reply.comment}}</p>
+                                        <p class="date inline-block">{{reply.date | date:shortDate }}</p>
+
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>
